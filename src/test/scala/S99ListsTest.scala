@@ -190,9 +190,9 @@ class S99ListsTest extends FlatSpec {
 
   "The split() method" should "split a list into two lists at an index, n, " +
     "and return them as a tuple" in {
-    assert(split(2, List(1, 2, 3, 4, 5)) == (List(1, 2), List(3, 4, 5)))
-    assert(split(0, List(1, 2)) == (List(), List(1, 2)))
-    assert(split(2, List(1, 2)) == (List(1, 2), List()))
+    assert(split(2, List(1, 2, 3, 4, 5)) ==(List(1, 2), List(3, 4, 5)))
+    assert(split(0, List(1, 2)) ==(List(), List(1, 2)))
+    assert(split(2, List(1, 2)) ==(List(1, 2), List()))
   }
 
   it should "throw IllegalArgumentException for an index outside of the list" in {
@@ -241,5 +241,69 @@ class S99ListsTest extends FlatSpec {
     assert(rotate(3, List('a, 'b, 'c, 'd)) == List('d, 'a, 'b, 'c))
     assert(rotate(2, List('a, 'b)) == List('a, 'b))
     assert(rotate(-1, List('a, 'b, 'c)) == List('c, 'a, 'b))
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //// P20
+  /////////////////////////////////////////////////////////////////////////////////
+
+  "The removeAt() method" should "return a tuple with the kth element removed paired with that element" in {
+    assert(removeAt(2, List(1, 2, 3)) ==(List(1, 2), 3))
+    assert(removeAt(3, List('a, 'b, 'c, 'd, 'e, 'f)) ==(List('a, 'b, 'c, 'e, 'f), 'd))
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //// P20
+  /////////////////////////////////////////////////////////////////////////////////
+
+  "The insertAt() method" should "return a list with a new element, el, inserted at index k" in {
+    assert(insertAt(0, 0, List(1, 2, 3)) == List(0, 1, 2, 3))
+    assert(insertAt('n, 2, List('a, 'b, 'c, 'd, 'e, 'f)) == List('a, 'b, 'n, 'c, 'd, 'e, 'f))
+    assert(insertAt(4, 3, List(1, 2, 3)) == List(1, 2, 3, 4))
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //// P21
+  /////////////////////////////////////////////////////////////////////////////////
+
+  "The range() method" should "create a list of integers between a given start and end integer" in {
+    assert(range(1, 2) == List(1, 2))
+    assert(range(-1, 1) == List(-1, 0, 1))
+    assert(range(3, 0) == List(3, 2, 1, 0))
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //// P23
+  /////////////////////////////////////////////////////////////////////////////////
+
+  "The randomSelect() method" should "generate a list of n elements taken randomly from a list." in {
+    val random = randomSelect(2, List(1, 2))
+    assert(random == List(1, 2) || random == List(2, 1))
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //// P24
+  /////////////////////////////////////////////////////////////////////////////////
+
+  "The lotto() method" should "draw N distinct random numbers from a range 1 to M" in {
+    val random = lotto(10, 50)
+    assert(random.length == 10 && random.forall(a => List.range(1, 51).contains(a)))
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //// P25
+  /////////////////////////////////////////////////////////////////////////////////
+
+  "The randomPermute() method" should "create a list that is a random permutation of another list" in {
+    assert(randomPermute(List(1, 2, 3)).length == 3)
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //// P26
+  /////////////////////////////////////////////////////////////////////////////////
+
+  "The combinations() method" should "generate all possible groupings of K members " +
+    "given N elements in a list" in {
+    assert(combinations(3, List.range(0, 12)).length == 220)
   }
 }
