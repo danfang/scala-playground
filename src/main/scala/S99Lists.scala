@@ -1,5 +1,3 @@
-
-
 /**
  * A first look into Scala collections and functional programming
  * methodology.
@@ -10,33 +8,7 @@
  *
  * @author Daniel Fang <danfang@uw.edu>
  */
-object S99Lists extends App {
-
-  val testList = List(5, 10, 15)
-  val palindromeList = List(1, 2, 3, 2, 1)
-  val nestedList = List(List(1, 1), 2, List(3, List(5, 8)))
-  val uncompressed = List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)
-  val toRotate = List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k)
-
-  println("p01: " + last(testList))
-  println("p02: " + penultimate(testList))
-  println("p03: " + testList(0))
-  println("p04: " + length(testList))
-  println("p05: " + reverse(testList))
-  println("p06: " + isPalindrome(palindromeList))
-  println("p07: " + flatten(nestedList))
-  println("p08: " + compressDupes(uncompressed))
-  println("p09: " + packDupes(uncompressed))
-  println("p10: " + encode(uncompressed))
-  println("p11: " + encodeModified(uncompressed))
-  println("p12: " + decode(encode(uncompressed)))
-  println("p13: " + encodeDirect(uncompressed))
-  println("p14: " + duplicate(testList))
-  println("p15: " + duplicateN(3, testList))
-  println("p16: " + drop(3, toRotate))
-  println("p17: " + split(3, toRotate))
-  println("p18: " + slice(3, 7, toRotate))
-  println("p19: " + rotate(3, toRotate))
+object S99Lists {
 
   def last[A](lst : List[A]) = lastN(1, lst)
 
@@ -47,6 +19,11 @@ object S99Lists extends App {
     if (n <= 0) throw new IllegalArgumentException
     if (lst.length < n) throw new NoSuchElementException
     lst.takeRight(n).head
+  }
+
+  def nth[A](n : Int, lst : List[A]) = {
+    if (n >= lst.length || n < 0) throw new IllegalArgumentException
+    lst(n)
   }
 
   // Functionally calculates the length of a list
@@ -72,7 +49,7 @@ object S99Lists extends App {
   }
 
   // Removes consecutive duplicates from a list
-  def compressDupes[A](lst : List[A]) : List[A] = {
+  def compress[A](lst : List[A]) : List[A] = {
     lst.foldRight(List[A]()) { (el, partial) =>
       if (partial.isEmpty || partial.head != el) el :: partial
       else partial
@@ -82,16 +59,16 @@ object S99Lists extends App {
   // Takes consecutive duplicates and puts them into lists,
   // returning a List of Lists. e.g. List(1, 1, 2, 3, 3, 3) ->
   // List(List(1, 1), List(2), List(3, 3, 3))
-  def packDupes[A](lst : List[A]) : List[List[A]] = {
+  def pack[A](lst : List[A]) : List[List[A]] = {
     val (packed, rest) = lst.span(el => el == lst.head)
-    if (rest != Nil) packed :: packDupes(rest)
+    if (rest != Nil) packed :: pack(rest)
     else List(packed)
   }
 
   // Consecutive duplicates of elements are encoded as tuples (N, E)
   // where N is the number of duplicates of the element E.
   def encode[A](lst : List[A]): List[(Int, A)] = {
-    packDupes(lst).foldRight(List[(Int, A)]()) { (packed, partial) =>
+    pack(lst).foldRight(List[(Int, A)]()) { (packed, partial) =>
       (packed.length, packed(0)) :: partial
     }
   }
@@ -99,7 +76,7 @@ object S99Lists extends App {
   // Consecutive duplicates of elements are encoded as tuples (N, E)
   // where N is the number of duplicates of the element E.
   def encodeModified[A](lst : List[A]): List[Any] = {
-    packDupes(lst).foldRight(List[Any]()) { (packed, partial) =>
+    pack(lst).foldRight(List[Any]()) { (packed, partial) =>
       if (packed.length > 1)
         (packed.length, packed(0)) :: partial
       else
@@ -116,7 +93,7 @@ object S99Lists extends App {
   def encodeDirect[A](lst : List[A]) : List[(Int, A)] = {
     val (packed, rest) = lst.span(el => el == lst.head)
     if (rest != Nil) (packed.length, packed(0)):: encodeDirect(rest)
-    else Nil
+    else List((packed.length, packed(0)))
   }
 
   // Duplicate each element within a list
@@ -138,12 +115,14 @@ object S99Lists extends App {
   // Split a list into two parts, given an index n
   // built-in: lst.splitAt(n)
   def split[A](n : Int, lst : List[A]) : (List[A], List[A]) = {
-    if (n > lst.length) throw new IllegalArgumentException
+    if (n > lst.length || n < 0) throw new IllegalArgumentException
     (lst.take(n), lst.drop(n))
   }
 
   // Slice a list from indices [i, k)
   def slice[A](i : Int, k : Int, lst : List[A]) : List[A] = {
+    if (i > k || i < 0 || k < 0 || k > lst.length || i > lst.length)
+      throw new IllegalArgumentException
     lst.drop(i).dropRight(lst.length - k)
   }
 
