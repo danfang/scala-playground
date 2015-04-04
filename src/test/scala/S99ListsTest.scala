@@ -306,4 +306,44 @@ class S99ListsTest extends FlatSpec {
     "given N elements in a list" in {
     assert(combinations(3, List.range(0, 12)).length == 220)
   }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //// P28 a
+  /////////////////////////////////////////////////////////////////////////////////
+
+  "The lsort() method" should "sort a list according to the length of its inner elements " in {
+    val unsorted =
+      List(
+        List('a, 'b, 'c), List('d, 'e), List('f, 'g, 'h),
+        List('d, 'e), List('i, 'j, 'k, 'l), List('m, 'n), List('o)
+      )
+
+    val sorted =
+      List(
+        List('o), List('d, 'e), List('d, 'e), List('m, 'n), List('a, 'b, 'c),
+        List('f, 'g, 'h), List('i, 'j, 'k, 'l)
+      )
+
+    assert(lsort(unsorted) == sorted)
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////
+  //// P28 b
+  /////////////////////////////////////////////////////////////////////////////////
+
+  "The lsortFreq() method" should "sort a list according to the frequency of the length of its elements " in {
+    val unsorted =
+      List(
+        List('a, 'b, 'c), List('d, 'e), List('f, 'g, 'h),
+        List('d, 'e), List('i, 'j, 'k, 'l), List('m, 'n), List('o)
+      )
+
+    val sorted =
+      List(
+        List('i, 'j, 'k, 'l), List('o), List('a, 'b, 'c), List('f, 'g, 'h),
+        List('d, 'e), List('d, 'e), List('m, 'n)
+      )
+
+    assert(lsortFreq(unsorted) == sorted)
+  }
 }

@@ -177,6 +177,7 @@ object S99Lists {
   }
 
   // Generate the combinations of K distinct objects chosen from the N elements of a list.
+  // Note lst.combinations(k) is the built-in to do this
   def combinations[A](k: Int, lst: List[A]): List[List[A]] = {
     if (k <= 0) throw new IllegalArgumentException
     if (lst.length == 0 || k > lst.length) Nil
@@ -210,5 +211,19 @@ object S99Lists {
         }
       }
     }._1
+  }
+
+  // Sort the elements of a list according to their length
+  def lsort(lst: List[Seq[Any]]): List[Seq[Any]] =
+    lst.sortBy(_.length)
+
+  // Sort the elements according to their length frequency, e.g.
+  // least common list lengths first
+  def lsortFreq(lst: List[Seq[Any]]): List[Seq[Any]] = {
+    lst.groupBy(_.length)       // Group list by element length
+      .values.groupBy(_.length) // Group groups by group length (freq)
+      .toSeq.sortBy(_._1)       // Sort groups by frequency (key)
+      .flatMap(_._2.flatten)    // Transform into Iterable[List]
+      .toList
   }
 }

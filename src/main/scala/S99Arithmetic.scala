@@ -3,6 +3,8 @@ import java.lang.Math._
 /**
  * Arithmetic and algorithms using FP in Scala.
  *
+ * Problems from http://aperiodic.net/phil/scala/s-99/
+ *
  * @author Daniel Fang <danfang@uw.edu>
  */
 object S99Arithmetic {
